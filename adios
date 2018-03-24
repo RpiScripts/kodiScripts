@@ -1,0 +1,71 @@
+#!/bin/bash
+# /home/pi/bin/adios
+# MOD: 02/11/2017
+
+# Localiza una ip, cuando deja de estar en línea cambia el valor del pin solicitado
+
+## PENDIENTE ##
+# 
+
+# Direcciones ip
+jose='192.168.1.123'
+josea='192.168.1.124'
+fatima='192.168.1.125'
+reproductor='192.168.1.161'
+
+ip=$1
+pin=$2
+
+# Introduzco la ip del equipo en la vaiable $ip
+if [ $ip = 'jose' ]; then
+ ip="$jose"
+elif [ $ip = 'josea' ]; then
+ ip="$josea"
+elif [ $ip = 'fatima' ]; then
+ ip="$fatima"
+elif [ $ip = 'reproductor' ]; then
+ ip="$reproductor"
+fi
+
+# Búsqueda de la ip en caso de no estar localizada al iniciar el código
+buscar=180
+# Veces que tiene que fallar la localización antes de apagar el sistema
+ciclos=3
+# Tiempo de espera para cada comprobación
+espera=60
+# Tiempo de espera para dar tiempo a cerrar el sistema
+cierre=120
+
+# CONTADORES
+
+# Si no hay respuesta del ping entonces no continúo porque ya se ha apagado o marchado.
+until ping -c1 $ip
+do
+for (( j=1; j<=$buscar; j++ ))
+ do
+ printf "No disponible la señal de %s. En espera de respuesta al ping. Ping %s\n" $1 $j
+ sleep 5
+ done
+
+ printf "Abortando el programa\n"
+ exit
+# Falta explicacion $?
+  printf "$?"
+done
+
+for (( k=1; k <= $ciclos; k++ ))
+do
+  while ping -c1 $ip
+  do
+   printf "%s todavía al alcance. >> %s\n\n" $1 `date +"%H:%M:%S"`
+   sleep $espera
+  done
+ printf "Sin señal de $1. Comprobando de nuevo.\n\n"
+done
+
+printf "Ciclos de espera concluidos. Cerrando el sistema\n"
+sleep $cierre
+
+# Llama al programa rpin con la opcion 3 y pin=$pin
+# Debe estar abierto el pin en modo de salida (out)
+rpin 3 $pin
