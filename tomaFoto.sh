@@ -6,7 +6,7 @@
 # Saca una foto y la guarda en el directorio /home/pi/camara
 
 # Variables
-define -r DIR_CAMARA='/home/pi/camara'
+declare -r DIR_CAMARA='/home/pi/camara'
 fecha=$(date +"foto-%Y%m%d-%H%M%S")
 
 echo $fecha.jpg
