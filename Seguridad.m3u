@@ -1,0 +1,5 @@
+# /root/.kodi/userdata/playlists/video/Seguridad.m3u
+#EXTM3U
+#EXTINF:0,Crenova PT100A
+#EXTVLCOPT:network-caching=1000
+rtsp://admin:clave@192.168.1.141:554/onvif1
